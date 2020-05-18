@@ -35,18 +35,64 @@ class CalcController{
         this._operation.pop()
     }
 
+    setLastOperation(value){
+        return this._operation[this._operation.length-1] = value
+    }
+
     getLastOperation(){
+
         return this._operation[this._operation.length-1]
+    }
+
+    isOperator(value){
+        return (['+', '-', '*','/','%'].indexOf(value) > -1)
+    }
+
+    pushOperation(value){
+        if (this._operation.length > 3){
+            this.calc()
+        } 
+    }
+
+    calc(){
+        let last = this._operation.pop()
+
+        let result = this._operation.join('')
+
+        this._operation = [result, last]
+    }
+
+    setNumbertoDisplay(){
+    
     }
 
     addOperation(value){
         if (isNaN(this.getLastOperation())){
-            //String
-            
+            if(this.isOperator(value)){
+                if (this._operation.length > 0){
+                    this.setLastOperation(value)
+                }
+                            
+            }else if (isNaN(value)){
+                //outra coisa
+                
+            }else{
+                this.pushOperation(value)    
+            }
+
         }else{
-            //Number
+            if (this.isOperator(value)){
+                this.pushOperation(value)
+            }else{
+                let newValue = this.getLastOperation().toString() + value.toString()
+                this.setLastOperation(parseInt(newValue))
+
+                this.setNumbertoDisplay()
+                }
+            }
+            
         }
-        this._operation.push(value)
+        console.log(this._operation)
         
     }
 
@@ -65,23 +111,23 @@ class CalcController{
                 break
             
             case 'soma':
-
+                this.addOperation('+')
                 break
 
             case 'subtracao':
-
+                this.addOperation('-')
                 break
             
             case 'multiplicacao':
-
+                this.addOperation('*')
                 break
                     
             case 'divisao':
-
+                this.addOperation('/')
                 break
 
             case 'porcento':
-
+                this.addOperation('%')
                 break
 
             case 'igual':
@@ -89,7 +135,7 @@ class CalcController{
                 break
 
             case 'ponto':
-
+                this.addOperation('.')
                 break
             
             case '0':
