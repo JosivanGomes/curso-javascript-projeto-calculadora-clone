@@ -48,51 +48,64 @@ class CalcController{
         return (['+', '-', '*','/','%'].indexOf(value) > -1)
     }
 
+
+
+    setLastNumbertoDisplay(){
+        let lastNumber
+        for(let i = this._operation.length-1; i >= 0; i--){
+            if (!this.isOperator(this._operation[i])){
+                lastNumber = this._operation[i]
+                break
+            }
+        }
+
+        this.displayCalc = lastNumber
+    }
+
     pushOperation(value){
         if (this._operation.length > 3){
             this.calc()
-        } 
+        }
+
+        this._operation.push(value)
     }
 
     calc(){
         let last = this._operation.pop()
 
-        let result = this._operation.join('')
+        let result = eval(this._operation.join(''))
 
         this._operation = [result, last]
-    }
 
-    setNumbertoDisplay(){
-    
+        
     }
 
     addOperation(value){
         if (isNaN(this.getLastOperation())){
             if(this.isOperator(value)){
-                if (this._operation.length > 0){
-                    this.setLastOperation(value)
-                }
+                this.setLastOperation(value)
                             
             }else if (isNaN(value)){
-                //outra coisa
+                
                 
             }else{
-                this.pushOperation(value)    
+                console.log('Eu sou um número')
+                this.pushOperation(value)
+                
+                this.setLastNumbertoDisplay()
             }
 
         }else{
-            if (this.isOperator(value)){
+
+            if(this.isOperator(value)){
                 this.pushOperation(value)
             }else{
                 let newValue = this.getLastOperation().toString() + value.toString()
                 this.setLastOperation(parseInt(newValue))
 
-                this.setNumbertoDisplay()
-                }
-            }
-            
-        }
-        console.log(this._operation)
+                this.setLastNumbertoDisplay()
+            }   
+        }        
         
     }
 
